@@ -1,98 +1,163 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>To-Do List App</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-</head>
-<body>
+    <link rel="stylesheet" href="css/style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
     <div class="app-container">
-        <!-- Header Profile & Time -->
-        <header class="profile-card">
-            <div class="user-info">
-                <img src="assets/images/profile.png" alt="Foto Profil" class="avatar" id="userAvatar" />
-                <div class="user-details">
-                    <h2 id="userName">Ahmad Darussalam</h2>
-                    <p id="userRole">Software Engineer</p>
-                </div>
+      <!-- Header Profile & Time -->
+      <header class="profile-card">
+        <div class="user-info">
+          <div class="avatar-wrapper">
+            <img
+              src="assets/images/profile.png"
+              alt="Foto Profil"
+              class="avatar"
+              id="userAvatar"
+            />
+          </div>
+          <div class="user-details">
+            <div class="user-header-row">
+              <h2 id="userName">Ahmad Darussalam</h2>
+              <button id="btnEditProfile" class="btn-edit-profile">
+                Edit Profil
+              </button>
             </div>
-            <div class="time-display">
-                <div class="day" id="currentDay">Minggu</div>
-                <div class="date" id="currentDate">2 Agustus 2026</div>
+            <p id="userRole">Software Engineer</p>
+            <div class="motivation-quote">Have a nice day! 🚀🔥</div>
+          </div>
+        </div>
+
+        <div class="time-display">
+          <div class="clock-time" id="digitalClock">00:00:00</div>
+          <div class="day-date">
+            <span id="currentDay">Minggu</span>,
+            <span id="currentDate">2 Agustus 2026</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Form Input Task -->
+      <section class="task-form-card">
+        <h3>Tambah Tugas Baru</h3>
+        <form id="todoForm">
+          <div class="form-group">
+            <label for="taskInput">Deskripsi Tugas</label>
+            <textarea
+              id="taskInput"
+              placeholder="Tuliskan tugas harianmu di sini..."
+              rows="3"
+              required
+            ></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Level Prioritas</label>
+              <div class="priority-selector">
+                <label class="priority-btn low">
+                  <input type="radio" name="priority" value="Low" />
+                  <span>Low</span>
+                </label>
+                <label class="priority-btn medium">
+                  <input type="radio" name="priority" value="Medium" checked />
+                  <span>Medium</span>
+                </label>
+                <label class="priority-btn high">
+                  <input type="radio" name="priority" value="High" />
+                  <span>High</span>
+                </label>
+              </div>
             </div>
-        </header>
 
-        <!-- Form Input Task -->
-        <section class="task-form-card">
-            <h3>Tambah Tugas Baru</h3>
-            <form id="todoForm">
-                <div class="form-group">
-                    <label for="taskInput">Deskripsi Tugas</label>
-                    <textarea id="taskInput" placeholder="Tuliskan tugas harianmu di sini..." rows="3" required></textarea>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="prioritySelect">Level Prioritas</label>
-                        <select id="prioritySelect" required>
-                            <option value="Low">Low</option>
-                            <option value="Medium" selected>Medium</option>
-                            <option value="High">High</option>
-                        </select>
-                    </div>
+            <div class="form-group">
+              <label for="dueDateInput">Batas Waktu (Deadline)</label>
+              <input type="date" id="dueDateInput" required />
+            </div>
+          </div>
 
-                    <div class="form-group">
-                        <label for="dueDateInput">Batas Waktu (Deadline)</label>
-                        <input type="datetime-local" id="dueDateInput" required>
-                    </div>
-                </div>
+          <button type="submit" id="btnSubmit" class="btn btn-primary">
+            Tambah Tugas
+          </button>
+        </form>
+      </section>
 
-                <button type="submit" id="btnSubmit" class="btn btn-primary">Tambah Tugas</button>
-            </form>
+      <!-- Main Task List Section -->
+      <main class="content-grid">
+        <section class="card">
+          <div class="card-header">
+            <h3>Daftar To-Do (<span id="todoCount">0</span>)</h3>
+
+            <button id="btnDeleteAll" class="btn btn-warning-sm">
+              Kosongkan To-Do
+            </button>
+          </div>
+          <div class="table-responsive">
+            <table class="todo-table">
+              <thead>
+                <tr>
+                  <th>Status</th>
+                  <th>Tugas</th>
+                  <th>Prioritas</th>
+                  <th>Waktu Dibuat / Deadline</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="todoTableBody"></tbody>
+            </table>
+          </div>
+          <div id="emptyTodoMsg" class="empty-state">
+            Belum ada tugas aktif. Selesai semua!
+          </div>
         </section>
 
-        <!-- Main Task List Section -->
-        <main class="content-grid">
-            <!-- Active To-Do List Table -->
-            <section class="card">
-                <div class="card-header">
-                    <h3>Daftar To-Do (<span id="todoCount">0</span>)</h3>
-                    <button id="btnDeleteAll" class="btn btn-danger-sm">Hapus Semua</button>
-                </div>
-                <div class="table-responsive">
-                    <table class="todo-table">
-                        <thead>
-                            <tr>
-                                <th>Status</th>
-                                <th>Tugas</th>
-                                <th>Prioritas</th>
-                                <th>Waktu Dibuat / Deadline</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="todoTableBody">
-                           
-                        </tbody>
-                    </table>
-                </div>
-                <div id="emptyTodoMsg" class="empty-state">Belum ada tugas aktif. Selesai semua!</div>
-            </section>
+        <section class="card">
+          <div class="card-header">
+            <h3>Selesai / Done (<span id="doneCount">0</span>)</h3>
 
-            <!-- Done List Section -->
-            <section class="card">
-                <div class="card-header">
-                    <h3>Selesai / Done (<span id="doneCount">0</span>)</h3>
-                </div>
-                <ul id="doneList" class="done-list">
-                   
-                </ul>
-                <div id="emptyDoneMsg" class="empty-state">Belum ada tugas yang diselesaikan.</div>
-            </section>
-        </main>
+            <button id="btnDeleteAllDone" class="btn btn-rose-sm">
+              Bersihkan Riwayat
+            </button>
+          </div>
+          <div id="doneList" class="done-list"></div>
+          <div id="emptyDoneMsg" class="empty-state">
+            Belum ada tugas yang diselesaikan.
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="profileModal" class="modal">
+      <div class="modal-content">
+        <h3>Edit Profil Karyawan</h3>
+        <div class="form-group">
+          <label for="inputName">Nama Lengkap</label>
+          <input type="text" id="inputName" />
+        </div>
+        <div class="form-group">
+          <label for="inputRole">Jabatan / Pekerjaan</label>
+          <input type="text" id="inputRole" />
+        </div>
+        <div class="form-group">
+          <label for="inputAvatarFile">Upload Foto Profil</label>
+          <input type="file" id="inputAvatarFile" accept="image/*" />
+        </div>
+        <div class="modal-actions">
+          <button id="btnCancelProfile" class="btn btn-secondary">Batal</button>
+          <button id="btnSaveProfile" class="btn btn-primary">
+            Simpan Profil
+          </button>
+        </div>
+      </div>
     </div>
 
     <script src="js/script.js"></script>
-</body>
+  </body>
 </html>
